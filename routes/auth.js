@@ -1,5 +1,6 @@
 const router = require('express').Router();
 const User = require('../models/User');
+const jwt = require('jsonwebtoken');
 
 router.route('/signup')
     //Render Frontend for SIGNUP
@@ -41,9 +42,17 @@ router.route('/signin')
                     error: "Incorrect Email or Password"
                 });
             }
-            return res.json({ user });
-            //Write Logic for storing cookie and redirect to Home Page
+            const token = jwt.sign({ _id: user._id }, 'RANDOMJSONWEBTOKENKEY');
+            res.cookie("t", token, { expire: new Date() + 99999 });
+            return res.json({ token, user: { user } });
         });
     });
+
+router.get('/signout', (req, res, next) => {
+    res.clearCookie("t");
+    return res.json({
+        message: "Signout Success"
+    });
+});
 
 module.exports = router;
