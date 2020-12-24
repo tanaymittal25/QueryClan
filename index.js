@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
 const authRoute = require('./routes/auth');
+const qaRoute = require('./routes/qa');
 
 const app = express();
 app.use(morgan('dev'));
@@ -17,7 +18,10 @@ mongoose.connect(dbUrl, { useUnifiedTopology: true, useNewUrlParser: true }, (er
 });
 
 app.use(authRoute);
+app.use(qaRoute);
 app.listen(3000, (err) => {
     if (err) throw err;
     console.log('Server running on port 3000');
 });
+
+
