@@ -18,13 +18,10 @@ mongoose.connect(dbUrl, { useUnifiedTopology: true, useNewUrlParser: true }, (er
 });
 
 app.use(authRoute);
+app.use(qaRoute);
 app.listen(3000, (err) => {
     if (err) throw err;
     console.log('Server running on port 3000');
 });
 
-app.use(qaRoute);
-app.listen(3001, (err) => {
-    if (err) throw err;
-    console.log('Server running on port 3001');
-});
+
