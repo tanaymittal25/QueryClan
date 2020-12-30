@@ -14,7 +14,7 @@ exports.signUp = async (req, res) => {
     res.status(200).json({
         message: "Signup success ... Please Login"
     });
-}
+};
 
 exports.signIn = (req, res) => {
     const { email, password } = req.body;
@@ -33,11 +33,11 @@ exports.signIn = (req, res) => {
         res.cookie("t", token, { expire: new Date() + 99999 });
         return res.json({ token, user: { user } });
     });
-}
+};
 
 exports.signOut = (req, res) => {
     res.clearCookie("t");
     return res.json({
         message: "Signout Success"
     });
-}
+};

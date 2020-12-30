@@ -6,4 +6,4 @@ exports.askQuestion = async (req, res) => {
     res.status(200).json({
         message: "Question Added success",
     });
-}
+};
