@@ -4,7 +4,7 @@ const Answer = require('../models/Answer');
 
 const jwt = require('jsonwebtoken');
 
-router.route('/addQuestion')
+router.route('/askQuestion')
     .post(async (req, res, next) => {
         const question = await new Question(req.body);
         await question.save();

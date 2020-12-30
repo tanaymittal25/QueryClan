@@ -2,37 +2,61 @@ const mongoose = require("mongoose");
 
 const QuestionSchema = new mongoose.Schema({
    
-    Question: {
+    question: {
         type: String,
-        trim: true,
         required: true
     },
-    UserId: {
+    content: String,
+    answers: [{
+        content: String,
+        user: {
+            type: mongoose.Schema.ObjectId,
+            ref: 'User'
+        },
+        created: {
+            type: Date,
+            default: Date.now
+        },
+        comments: [{
+            content: String,
+            user: {
+                type: mongoose.Schema.ObjectId,
+                ref: 'User'
+            },
+            created: {
+                type: Date,
+                default: Date.now
+            }
+        }]
+    }],
+    user: {
         type: mongoose.Schema.ObjectId,
         ref: 'User'
     },
-    Keywords: {
-        type: Array,
-        trim: true
-    },
-    Domain: {
-        type: String,
-        trim: true
-    },
-    Version: {
-        type: String,
-        trim: true
-    },
+    keywords: [{
+        text: String
+    }],
+    domain: String,
+    Version: String,
     isClosed: Boolean,
-    Attachments: {
-        type: String,
-        trim: true
-    },
+    Attachments: String,
     created: {
         type: Date,
         default: Date.now
     },
-    updated: Date
+    comments: [{
+        content: String,
+        user: {
+            type: mongoose.Schema.ObjectId,
+            ref: 'User'
+        },
+        created: {
+            type: Date,
+            default: Date.now
+        }
+    }],
+    updated: Date,
+    searchText: String,
 });
 
 module.exports = mongoose.model("Question", QuestionSchema);
