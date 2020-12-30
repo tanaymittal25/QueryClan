@@ -1,5 +1,6 @@
 const User = require('../models/User');
 const jwt = require('jsonwebtoken');
+const expressJwt = require('express-jwt');
 
 exports.signUp = async (req, res) => {
     const userExists = await User.findOne({
@@ -30,7 +31,7 @@ exports.signIn = (req, res) => {
             });
         }
         const token = jwt.sign({ _id: user._id }, 'RANDOMJSONWEBTOKENKEY');
-        res.cookie("t", token, { expire: new Date() + 99999 });
+        res.cookie("t", token, { expire: new Date() + 99999 }, { algorithm: 'RS256' });
         return res.json({ token, user: { user } });
     });
 };
@@ -40,4 +41,24 @@ exports.signOut = (req, res) => {
     return res.json({
         message: "Signout Success"
     });
+};
+
+exports.requireSignin = (req, res, next) => {
+    var token = req.headers.cookie.split('=')[1];
+    if (token) {
+        jwt.verify(token, 'RANDOMJSONWEBTOKENKEY', function (err, user) {
+            if (err) {
+                console.log("jwt.verify ERROR")
+                return res.json({ success: false, message: 'Failed to authenticate token.', err: err });
+            } else {
+                req.profile = user._id;
+                next();
+            }
+        });
+    } else {
+        return res.status(403).send({
+            success: false,
+            message: 'No token provided.'
+        });
+    }
 };

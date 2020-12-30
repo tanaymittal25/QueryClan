@@ -2,6 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser');
 const authRoute = require('./routes/auth');
 const qaRoute = require('./routes/question');
 
