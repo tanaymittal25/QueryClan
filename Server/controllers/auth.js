@@ -51,7 +51,7 @@ exports.requireSignin = (req, res, next) => {
                 console.log("jwt.verify ERROR")
                 return res.json({ success: false, message: 'Failed to authenticate token.', err: err });
             } else {
-                req.profile = user._id;
+                req.userId = user._id;
                 next();
             }
         });
