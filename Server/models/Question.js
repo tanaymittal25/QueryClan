@@ -8,8 +8,8 @@ const QuestionSchema = new mongoose.Schema({
         required: true
     },
     UserId: {
-        type: String,
-        required: true
+        type: mongoose.Schema.ObjectId,
+        ref: 'User'
     },
     Keywords: {
         type: Array,
