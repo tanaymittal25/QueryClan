@@ -99,7 +99,6 @@ const getSearchText = function(question) {
     question.comments.forEach(comment => {
         searchText += comment.content + " ";
     });
-    console.log('searchText: ', searchText);
     return searchText;
 }
   

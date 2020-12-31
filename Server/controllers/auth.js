@@ -1,6 +1,5 @@
 const User = require('../models/User');
 const jwt = require('jsonwebtoken');
-const expressJwt = require('express-jwt');
 
 exports.signUp = async (req, res) => {
     const userExists = await User.findOne({
@@ -44,17 +43,25 @@ exports.signOut = (req, res) => {
 };
 
 exports.requireSignin = (req, res, next) => {
-    var token = req.headers.cookie.split('=')[1];
-    if (token) {
-        jwt.verify(token, 'RANDOMJSONWEBTOKENKEY', function (err, user) {
-            if (err) {
-                console.log("jwt.verify ERROR")
-                return res.json({ success: false, message: 'Failed to authenticate token.', err: err });
-            } else {
-                req.userId = user._id;
-                next();
-            }
-        });
+    if (req.headers.cookie) {
+        var token = req.headers.cookie.split('=')[1];
+        if (token) {
+            jwt.verify(token, 'RANDOMJSONWEBTOKENKEY', function (err, user) {
+                if (err) {
+                    return res.json({ success: false, message: 'Failed to authenticate token.', err: err });
+                } else {
+                    User.findById(user._id)
+                        .then(user => {
+                            if (!user) {
+                                return res.status(401).end();
+                            }
+                            req.user = user;
+                            next();
+                        })
+                        .catch(err => next(err));
+                }
+            });
+        }
     } else {
         return res.status(403).send({
             success: false,
